@@ -524,9 +524,9 @@ def register(bot, custom_command_handler, command_prefixes_list, is_authorized_f
                     cc = raw_input
 
         processing = bot.reply_to(msg, "✦━━━[  ᴘʀᴏᴄᴇꜱꜱɪɴɢ ]━━━✦\n\n"
-    "⟡ ʏᴏᴜʀ ᴄᴀʀᴅ ɪꜱ ʙᴇɪɴɢ ᴄʜᴇᴄᴋ...\n"
+    "⟡ ʏᴏᴜʀ ᴄᴀʀᴅ ɪꜱ ʙᴇɪɴɢ ᴄʜᴇᴄ...\n"
     "⟡ ᴘʟᴇᴀꜱᴇ ᴡᴀɪᴛ ᴀ ꜰᴇᴡ ꜱᴇᴄᴏɴᴅꜱ\n\n"
-    "✧ ᴅᴏ ɴᴏᴛ ꜱᴘᴀᴍ ᴏʀ ʀᴇꜱᴜʙᴍɪᴛ ✧")
+    "✧ ᴅᴏ ɴᴏᴛ ꜱᴘᴀᴍ ᴏʀ ʀᴇꜱUʙᴍɪᴛ ✧")
 
         def check_and_reply():
             try:
@@ -537,136 +537,6 @@ def register(bot, custom_command_handler, command_prefixes_list, is_authorized_f
 
         threading.Thread(target=check_and_reply).start()
 
-    @custom_command_handler("mb3")
-    def mb3_handler(msg):
-        auth_id = msg.chat.id if msg.chat.type in ['group', 'supergroup'] else msg.from_user.id
-        if not is_authorized_func(auth_id):
-            return bot.reply_to(msg, """✦━━━[  ᴀᴄᴄᴇꜱꜱ ᴅᴇɴɪᴇᴅ ]━━━✦
-
-⟡ ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴀᴜᴛʜᴏʀɪᴢᴇᴅ ᴛᴏ ᴜꜱᴇ ᴛʜɪꜱ ʙᴏᴛ
-⟡ ᴏɴʟʏ ᴀᴜᴛʜᴏʀɪᴢᴇᴅ ᴍᴇᴍʙᴇʀꜱ ᴜꜱᴇ ᴛʜɪꜱ ʙᴏᴛ
-
-✧ ᴘʟᴇᴀꜱᴇ ᴄᴏɴᴛᴀᴄᴛ ᴀᴅᴍɪɴ ꜰᴏʀ ᴀᴜᴛʜᴏʀɪᴢᴀᴛɪᴏɴ
-✧ ᴀᴅᴍɪɴ: @bro_bin_lagbe""")
-        text_to_process = ""
-        is_document_reply = False
-        
-        args = msg.text.split(None, 1)
-
-        if len(args) > 1: # Direct argument provided
-            text_to_process = args[1]
-        elif msg.reply_to_message: # Reply to a message
-            reply = msg.reply_to_message
-            if reply.document:
-                is_document_reply = True
-                file_info = bot.get_file(reply.document.file_id)
-                downloaded_file = bot.download_file(file_info.file_path)
-                text_to_process = downloaded_file.decode('utf-8', errors='ignore')
-            else:
-                text_to_process = reply.text or ""
-        
-        if not text_to_process.strip():
-            return bot.reply_to(msg, "✦━━━[ ᴡʀᴏɴɢ ᴜꜱᴀɢᴇ ]━━━✦\n\n"
-    "⟡ ᴘʟᴇᴀꜱᴇ ᴘʀᴏᴠɪᴅᴇ ᴄʀᴇᴅɪᴛ ᴄᴀʀᴅ ᴛᴇxᴛ ᴅɪʀᴇᴄᴛʟʏ ᴏʀ ʀᴇᴘʟʏ ᴛᴏ ᴀ `.txt` ꜰɪʟᴇ ᴏʀ ᴄʀᴇᴅɪᴛ ᴄᴀʀᴅ ᴛᴇxᴛ\n\n"
-    "ᴄᴏʀʀᴇᴄᴛ ꜰᴏʀᴍᴀᴛ\n\n"
-    "`/mb3 4556737586899855|12|2026|123`\n\n"
-    "ᴏʀ ʀᴇᴘʟʏ ᴛᴏ ᴀ ᴍᴇꜱꜱᴀɢᴇ ᴄᴏɴᴛᴀɪɴɪɴɢ ᴄᴄ ᴡɪᴛʜ `/mb3`\n\n"
-    "✧ ᴏɴʟʏ ᴠᴀʟɪᴅ ᴄᴀʀᴅꜱ ᴡɪʟʟ ʙᴇ ᴄʜᴇᴄᴋᴇᴅ & ᴀᴘᴘʀᴏᴠᴇᴅ ᴄᴀʀᴅꜱ ꜱʜᴏᴡɴ ✧")
-
-        cc_lines = []
-        for line in text_to_process.splitlines():
-            line = line.strip()
-            if not line:
-                continue
-
-            normalized_cc = normalize_card(line)
-            if normalized_cc:
-                cc_lines.append(normalized_cc)
-
-        if not cc_lines:
-            return bot.reply_to(msg, "✦━━━[ ⚠️ ɴᴏ ᴠᴀʟɪᴅ ᴄᴀʀᴅꜱ ꜰᴏᴜɴᴅ ]━━━✦\n\n"
-    "⟡ ɴᴏ ᴠᴀʟɪᴅ ᴄʀᴇᴅɪᴛ ᴄᴀʀᴅꜱ ᴅᴇᴛᴇᴄᴛᴇᴅ ɪɴ ᴛʜᴇ ꜰɪʟᴇ\n"
-    "⟡ ᴘʟᴇᴀꜱᴇ ᴍᴀᴋᴇ ꜱᴜʀᴇ ᴛʜᴇ ᴄᴀʀᴅꜱ ᴀʀᴇ ɪɴ ᴄᴏʀʀᴇᴄᴛ ꜰᴏʀᴍᴀᴛ\n\n"
-    "ᴄᴏʀʀᴇᴄᴛ ꜰᴏʀᴍᴀᴛ\n"
-    "`4556737586899855|12|2026|123`\n\n"
-    "✧ ᴄᴏɴᴛᴀᴄᴛ ᴀᴅᴍɪɴ ɪꜰ ʏᴏᴜ ɴᴇᴇᴅ ʜᴇʟᴘ")
-
-        if not is_document_reply and len(cc_lines) > 15:
-            return bot.reply_to(msg, "✦━━━[ ⚠️ ʟɪᴍɪᴛ ᴇxᴄᴇᴇᴅᴇᴅ ]━━━✦\n\n"
-    "⟡ ᴏɴʟʏ 15 ᴄᴀʀᴅꜱ ᴀʟʟᴏᴡᴇᴅ ɪɴ ʀᴀᴡ ᴘᴀꜱᴛᴇ ᴏʀ ᴅɪʀᴇᴄᴛ ᴀʀɢᴜᴍᴇɴᴛ\n"
-    "⟡ ꜰᴏʀ ᴍᴏʀᴇ ᴄᴀʀᴅꜱ, ᴘʟᴇᴀꜱᴇ ᴜᴘʟᴏᴀᴅ ᴀ `.txt` ꜰɪʟᴇ")
-
-        total = len(cc_lines)
-        user_id = msg.from_user.id
-
-        kb = InlineKeyboardMarkup(row_width=1)
-        buttons = [
-            InlineKeyboardButton(f"ᴀᴘᴘʀᴏᴠᴇᴅ 0 ✅", callback_data="none"),
-            InlineKeyboardButton(f"ᴅᴇᴄʟɪɴᴇᴅ 0 ❌", callback_data="none"),
-            InlineKeyboardButton(f"ᴛᴏᴛᴀʟ ᴄʜᴇᴄᴋᴇᴅ 0", callback_data="none"),
-            InlineKeyboardButton(f"ᴛᴏᴛᴀʟ {total} ✅", callback_data="none"),
-        ]
-        for btn in buttons:
-            kb.add(btn)
-
-        status_msg = bot.send_message(user_id, f"✦━━━[  ᴍᴀꜱꜱ ᴄʜᴇᴄᴋ ꜱᴛᴀʀᴛᴇᴅ ]━━━✦\n\n"
-    "⟡ ᴘʀᴏᴄᴇꜱꜱɪɴɢ ʏᴏᴜʀ ᴄᴀʀᴅꜱ...\n"
-    "⟡ ᴘʟᴇᴀꜱᴇ ᴡᴀɪᴛ ᴀ ꜰᴇᴡ ᴍᴏᴍᴇɴᴛꜱ\n\n"
-    " ʟɪᴠᴇ ꜱᴛᴀᴛᴜꜱ ᴡɪʟʟ ʙᴇ ᴜᴘᴅᴀᴛᴇᴅ ʙᴇʟᴏᴡ", reply_markup=kb)
-
-        approved, declined, checked = 0, 0, 0
-        approved_cards_list = []
-        declined_cards_list = []
-
-        def process_all():
-            nonlocal approved, declined, checked
-            nonlocal approved_cards_list, declined_cards_list
-            for cc in cc_lines:
-                try:
-                    checked += 1
-                    result = check_card(cc.strip())
-                    if "[APPROVED]" in result:
-                        approved += 1
-                        approved_cards_list.append(cc.strip())
-                        bot.send_message(user_id, result, parse_mode='HTML')
-                        if user_id not in admin_ids_list:
-                            for admin_id in admin_ids_list:
-                                bot.send_message(admin_id, f"✅ Approved by {user_id}:\n{result}", parse_mode='HTML')
-                    else:
-                        declined += 1
-                        declined_cards_list.append(cc.strip())
-
-                    new_kb = InlineKeyboardMarkup(row_width=1)
-                    new_kb.add(
-                        InlineKeyboardButton(f"ᴀᴘᴘʀᴏᴠᴇᴅ {approved} 🔥", callback_data="none"),
-                        InlineKeyboardButton(f"ᴅᴇᴄʟɪɴᴇᴅ {declined} ❌", callback_data="none"),
-                        InlineKeyboardButton(f"ᴛᴏᴛᴀʟ ᴄʜᴇᴄᴋᴇᴅ {checked} ✔️", callback_data="none"),
-                        InlineKeyboardButton(f"ᴛᴏᴛᴀʟ {total} ✅", callback_data="none"),
-                    )
-                    bot.edit_message_reply_markup(user_id, status_msg.message_id, reply_markup=new_kb)
-                    time.sleep(2)
-                except Exception as e:
-                    bot.send_message(user_id, f"❌ Error: {e}")
-
-            final_summary = "✦━━━[ ᴄʜᴇᴄᴋɪɴɢ ᴄᴏᴍᴘʟᴇᴛᴇᴅ ]━━━✦\n\n"
-            final_summary += f"⟡ ᴀʟʟ ᴄᴀʀᴅꜱ ʜᴀᴠᴇ ʙᴇᴇɴ ᴘʀᴏᴄᴇꜱꜱᴇᴅ\n"
-            final_summary += f"⟡ ᴛʜᴀɴᴋ ʏᴏᴜ ꜰᴏʀ ᴜꜱɪɴɢ ᴍᴀꜱꜱ ᴄʜᴇᴄᴋ\n\n"
-
-            if approved_cards_list:
-                final_summary += "✅ 𝗔𝗽𝗽𝗿𝗼𝘃𝗲𝗱 𝗖𝗮𝗿𝗱𝘀:\n" + "\n".join(approved_cards_list) + "\n\n"
-            else:
-                final_summary += "✅ 𝗔𝗽𝗽𝗿𝗼𝘃𝗲𝗱 𝗖𝗮𝗿𝗱𝘀: None\n\n"
-
-            if declined_cards_list:
-                final_summary += "❌ 𝗗𝗲𝗰𝗹𝗶𝗻𝗲𝗱 𝗖𝗮𝗿𝗱𝘀:\n" + "\n".join(declined_cards_list) + "\n\n"
-            else:
-                final_summary += "❌ 𝗗𝗲𝗰𝗹𝗶𝗻𝗲𝗱 𝗖𝗮𝗿𝗱𝘀: None\n\n"
-
-            final_summary += "ʏᴏᴜ ᴄᴀɴ ʀᴜɴ /mb3 ᴀɢᴀɪɴ ᴡɪᴛʜ ᴀ ɴᴇᴡ ʟɪꜱᴛ"
-
-            bot.send_message(user_id, final_summary)
-
-        threading.Thread(target=process_all).start()
 
 # Initialize sites and cookies when the handler is loaded
 load_sites_and_cookies()
