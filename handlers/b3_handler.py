@@ -548,21 +548,30 @@ def register(bot, custom_command_handler, command_prefixes_list, is_authorized_f
 
 ✧ ᴘʟᴇᴀꜱᴇ ᴄᴏɴᴛᴀᴄᴛ ᴀᴅᴍɪɴ ꜰᴏʀ ᴀᴜᴛʜᴏʀɪᴢᴀᴛɪᴏɴ
 ✧ ᴀᴅᴍɪɴ: @bro_bin_lagbe""")
-        if not msg.reply_to_message:
+        text_to_process = ""
+        is_document_reply = False
+        
+        args = msg.text.split(None, 1)
+
+        if len(args) > 1: # Direct argument provided
+            text_to_process = args[1]
+        elif msg.reply_to_message: # Reply to a message
+            reply = msg.reply_to_message
+            if reply.document:
+                is_document_reply = True
+                file_info = bot.get_file(reply.document.file_id)
+                downloaded_file = bot.download_file(file_info.file_path)
+                text_to_process = downloaded_file.decode('utf-8', errors='ignore')
+            else:
+                text_to_process = reply.text or ""
+        
+        if not text_to_process.strip():
             return bot.reply_to(msg, "✦━━━[ ᴡʀᴏɴɢ ᴜꜱᴀɢᴇ ]━━━✦\n\n"
-    "⟡ ᴘʟᴇᴀꜱᴇ ʀᴇᴘʟʏ ᴛᴏ ᴀ `.txt` ꜰɪʟᴇ ᴏʀ ᴄʀᴇᴅɪᴛ ᴄᴀʀᴅ ᴛᴇxᴛ\n\n"
+    "⟡ ᴘʟᴇᴀꜱᴇ ᴘʀᴏᴠɪᴅᴇ ᴄʀᴇᴅɪᴛ ᴄᴀʀᴅ ᴛᴇxᴛ ᴅɪʀᴇᴄᴛʟʏ ᴏʀ ʀᴇᴘʟʏ ᴛᴏ ᴀ `.txt` ꜰɪʟᴇ ᴏʀ ᴄʀᴇᴅɪᴛ ᴄᴀʀᴅ ᴛᴇxᴛ\n\n"
+    "ᴄᴏʀʀᴇᴄᴛ ꜰᴏʀᴍᴀᴛ\n\n"
+    "`/mb3 4556737586899855|12|2026|123`\n\n"
+    "ᴏʀ ʀᴇᴘʟʏ ᴛᴏ ᴀ ᴍᴇꜱꜱᴀɢᴇ ᴄᴏɴᴛᴀɪɴɪɴɢ ᴄᴄ ᴡɪᴛʜ `/mb3`\n\n"
     "✧ ᴏɴʟʏ ᴠᴀʟɪᴅ ᴄᴀʀᴅꜱ ᴡɪʟʟ ʙᴇ ᴄʜᴇᴄᴋᴇᴅ & ᴀᴘᴘʀᴏᴠᴇᴅ ᴄᴀʀᴅꜱ ꜱʜᴏᴡɴ ✧")
-
-        reply = msg.reply_to_message
-
-        if reply.document:
-            file_info = bot.get_file(reply.document.file_id)
-            downloaded_file = bot.download_file(file_info.file_path)
-            text = downloaded_file.decode('utf-8', errors='ignore')
-        else:
-            text = reply.text or ""
-            if not text.strip():
-                return bot.reply_to(msg, "❌ Empty text message.")
 
         cc_lines = []
         for line in text.splitlines():
@@ -589,9 +598,9 @@ def register(bot, custom_command_handler, command_prefixes_list, is_authorized_f
     "`4556737586899855|12|2026|123`\n\n"
     "✧ ᴄᴏɴᴛᴀᴄᴛ ᴀᴅᴍɪɴ ɪꜰ ʏᴏᴜ ɴᴇᴇᴅ ʜᴇʟᴘ")
 
-        if not reply.document and len(cc_lines) > 15:
+        if not is_document_reply and len(cc_lines) > 15:
             return bot.reply_to(msg, "✦━━━[ ⚠️ ʟɪᴍɪᴛ ᴇxᴄᴇᴇᴅᴇᴅ ]━━━✦\n\n"
-    "⟡ ᴏɴʟʏ 15 ᴄᴀʀᴅꜱ ᴀʟʟᴏᴡᴇᴅ ɪɴ ʀᴀᴡ ᴘᴀꜱᴛᴇ\n"
+    "⟡ ᴏɴʟʏ 15 ᴄᴀʀᴅꜱ ᴀʟʟᴏᴡᴇᴅ ɪɴ ʀᴀᴡ ᴘᴀꜱᴛᴇ ᴏʀ ᴅɪʀᴇᴄᴛ ᴀʀɢᴜᴍᴇɴᴛ\n"
     "⟡ ꜰᴏʀ ᴍᴏʀᴇ ᴄᴀʀᴅꜱ, ᴘʟᴇᴀꜱᴇ ᴜᴘʟᴏᴀᴅ ᴀ `.txt` ꜰɪʟᴇ")
 
         total = len(cc_lines)
