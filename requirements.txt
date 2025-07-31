@@ -10,7 +10,7 @@ langdetect
 yt-dlp
 pyrogram
 tgcrypto
-moviepy
 FakeXYZ
 Babel
 pycountry
+beautifulsoup4
