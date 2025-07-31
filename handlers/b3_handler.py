@@ -574,7 +574,7 @@ def register(bot, custom_command_handler, command_prefixes_list, is_authorized_f
     "✧ ᴏɴʟʏ ᴠᴀʟɪᴅ ᴄᴀʀᴅꜱ ᴡɪʟʟ ʙᴇ ᴄʜᴇᴄᴋᴇᴅ & ᴀᴘᴘʀᴏᴠᴇᴅ ᴄᴀʀᴅꜱ ꜱʜᴏᴡɴ ✧")
 
         cc_lines = []
-        for line in text.splitlines():
+        for line in text_to_process.splitlines():
             line = line.strip()
             if not line:
                 continue
@@ -582,13 +582,6 @@ def register(bot, custom_command_handler, command_prefixes_list, is_authorized_f
             normalized_cc = normalize_card(line)
             if normalized_cc:
                 cc_lines.append(normalized_cc)
-            else:
-                found = re.findall(r'\b(?:\d[ -]*?){13,16}\b.*?\|.*?\|.*?\|.*', line)
-                if found:
-                    cc_lines.extend(found)
-                else:
-                    parts = re.findall(r'\d{12,16}[|: -]\d{1,2}[|: -]\d{2,4}[|: -]\d{3,4}', line)
-                    cc_lines.extend(parts)
 
         if not cc_lines:
             return bot.reply_to(msg, "✦━━━[ ⚠️ ɴᴏ ᴠᴀʟɪᴅ ᴄᴀʀᴅꜱ ꜰᴏᴜɴᴅ ]━━━✦\n\n"
