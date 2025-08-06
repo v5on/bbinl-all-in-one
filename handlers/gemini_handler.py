@@ -15,12 +15,32 @@ model = genai.GenerativeModel("gemini-2.5-flash-lite")
 HISTORY_DIR = Path("gemini_histories")
 HISTORY_DIR.mkdir(exist_ok=True)
 
-# 🧠 In-memory state
-loaded_histories = {}
-auto_reply_status = {}
+# 📁 Auto-reply status stored here
+STATUS_FILE = Path("auto_reply_status.json")
 
-MAX_TURNS = 50
+# 🧠 In-memory state
+auto_reply_status = {}
+loaded_histories = {}
+
+MAX_TURNS = 500
 HISTORY_RETENTION_TIME = 20 * 60 # 20 minutes in seconds
+
+def load_status():
+    """Load auto-reply status from file on bot startup."""
+    global auto_reply_status
+    if STATUS_FILE.exists():
+        with STATUS_FILE.open("r") as f:
+            try:
+                data = json.load(f)
+                auto_reply_status = {int(k): v for k, v in data.items()}
+            except (json.JSONDecodeError, ValueError):
+                auto_reply_status = {}
+                print("Error loading status file, starting fresh.")
+
+def save_status():
+    """Save auto-reply status to file."""
+    with STATUS_FILE.open("w") as f:
+        json.dump(auto_reply_status, f, indent=2)
 
 async def delete_old_histories():
     now = time.time()
@@ -81,9 +101,10 @@ async def ask_gemini(prompt, chat_id):
     return response
 
 def register(bot, custom_command_handler, command_prefixes_list):
+    load_status() # Load status on startup
+
     @custom_command_handler("gemini")
     def handle_gemini(message):
-
         command_text = message.text.split(" ", 1)[0].lower()
         actual_command_len = 0
         for prefix in command_prefixes_list: 
@@ -99,7 +120,6 @@ def register(bot, custom_command_handler, command_prefixes_list):
 
         prompt = prompt_raw
 
-        # প্রথমে একটি প্লেসহোল্ডার মেসেজ পাঠাও
         thinking_message = bot.reply_to(message, "🤖 জেমিনি ভাবছে...")
 
         try:
@@ -116,16 +136,16 @@ def register(bot, custom_command_handler, command_prefixes_list):
                 text=f"❌ Error: {e}"
             )
 
-    # ✅ Turn auto-reply ON
     @custom_command_handler("gemini_on")
     def enable_autoreply(message):
         auto_reply_status[message.chat.id] = True
+        save_status() # Save status after change
         bot.reply_to(message, "✅ জেমিনির অটো-রিপ্লাই চালু হয়েছে।")
 
-    # ✅ Turn auto-reply OFF
     @custom_command_handler("gemini_off")
     def disable_autoreply(message):
         auto_reply_status[message.chat.id] = False
+        save_status() # Save status after change
         bot.reply_to(message, "❌ জেমিনির অটো-রিপ্লাই বন্ধ করা হয়েছে।")
 
     @bot.message_handler(func=lambda msg: msg.content_type == 'text' and not any(msg.text.lower().startswith(p) for p in command_prefixes_list)) 
