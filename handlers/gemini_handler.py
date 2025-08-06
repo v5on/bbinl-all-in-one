@@ -6,9 +6,9 @@ import telebot
 import google.generativeai as genai
 
 # 🔐 Gemini API Key
-GEMINI_API_KEY = "AIzaSyB5TpGTpHOY1UFsggmpr25vgRdhMRTKfUA"
+GEMINI_API_KEY = "AIzaSyC6gWj3u28Rx5bOS82VkhWslQKC4v3O7cQ"
 genai.configure(api_key=GEMINI_API_KEY)
-model = genai.GenerativeModel("gemini-1.5-flash")
+model = genai.GenerativeModel("gemini-2.5-flash")
 
 # 📁 Chat histories stored here
 HISTORY_DIR = Path("gemini_histories")
