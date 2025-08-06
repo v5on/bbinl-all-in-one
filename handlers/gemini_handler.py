@@ -136,13 +136,13 @@ def register(bot, custom_command_handler, command_prefixes_list):
                 text=f"❌ Error: {e}"
             )
 
-    @custom_command_handler("gemini_on")
+    @custom_command_handler("gmni_on")
     def enable_autoreply(message):
         auto_reply_status[message.chat.id] = True
         save_status() # Save status after change
         bot.reply_to(message, "✅ জেমিনির অটো-রিপ্লাই চালু হয়েছে।")
 
-    @custom_command_handler("gemini_off")
+    @custom_command_handler("gmni_off")
     def disable_autoreply(message):
         auto_reply_status[message.chat.id] = False
         save_status() # Save status after change
