@@ -1,6 +1,7 @@
 import os
 import json
 import asyncio
+import time
 from pathlib import Path
 import telebot
 import google.generativeai as genai
@@ -8,7 +9,7 @@ import google.generativeai as genai
 # 🔐 Gemini API Key
 GEMINI_API_KEY = "AIzaSyA-bnKONL8fj-Dwsw8UEec3Ci-UHEHVw4w"
 genai.configure(api_key=GEMINI_API_KEY)
-model = genai.GenerativeModel("gemini-2.5-flash")
+model = genai.GenerativeModel("gemini-2.5-flash-lite")
 
 # 📁 Chat histories stored here
 HISTORY_DIR = Path("gemini_histories")
@@ -19,6 +20,22 @@ loaded_histories = {}
 auto_reply_status = {}
 
 MAX_TURNS = 50
+HISTORY_RETENTION_TIME = 20 * 60 # 20 minutes in seconds
+
+async def delete_old_histories():
+    now = time.time()
+    for file_path in HISTORY_DIR.iterdir():
+        if file_path.is_file() and file_path.suffix == ".json":
+            last_modified_time = file_path.stat().st_mtime
+            if (now - last_modified_time) > HISTORY_RETENTION_TIME:
+                try:
+                    os.remove(file_path)
+                    print(f"Deleted old history file: {file_path.name}")
+                    chat_id = int(file_path.stem)
+                    if chat_id in loaded_histories:
+                        del loaded_histories[chat_id]
+                except Exception as e:
+                    print(f"Error deleting file {file_path.name}: {e}")
 
 async def load_history(chat_id):
     path = HISTORY_DIR / f"{chat_id}.json"
@@ -34,6 +51,8 @@ async def save_history(chat_id):
         json.dump(loaded_histories[chat_id], f, indent=2)
 
 async def ask_gemini(prompt, chat_id):
+    await delete_old_histories()
+
     if chat_id not in loaded_histories:
         await load_history(chat_id)
 
