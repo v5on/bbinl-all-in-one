@@ -6,7 +6,7 @@ import telebot
 import google.generativeai as genai
 
 # 🔐 Gemini API Key
-GEMINI_API_KEY = "AIzaSyC6gWj3u28Rx5bOS82VkhWslQKC4v3O7cQ"
+GEMINI_API_KEY = "AIzaSyA-bnKONL8fj-Dwsw8UEec3Ci-UHEHVw4w"
 genai.configure(api_key=GEMINI_API_KEY)
 model = genai.GenerativeModel("gemini-2.5-flash")
 
