@@ -19,3 +19,4 @@ from handlers.yt_handler import register as yt_register
 from handlers.spam_handler import register as spam_register
 from handlers.iban_handler import register as iban_register
 from handlers.b3_handler import register as b3_register
+from handlers.movie_handler import register as movie_register
