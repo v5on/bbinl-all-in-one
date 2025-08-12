@@ -29,10 +29,10 @@ def check_card(card):
         status_emoji = ""
         if "live" in status.lower():
             status = "Live"
-            status_emoji = "🟢✅"
+            status_emoji = "✅"
         elif "die" in status.lower() or "declined" in status.lower():
             status = "Dead"
-            status_emoji = "🔴❌"
+            status_emoji = "❌"
         else:
             status = "Unknown"
             status_emoji = "⚠️❓"
@@ -78,7 +78,7 @@ def register(bot, custom_command_handler, command_prefixes_list):
             bot.edit_message_text(
                 chat_id=sent_msg.chat.id,
                 message_id=sent_msg.message_id,
-                text=f"<code>{card}</code>\n{status}\n\n👤 𝗥𝗲𝗾𝘂𝗲𝘀𝘁 𝗯𝘆: {username}  |  𝗝𝗼𝗶𝗻: @bro_bin_lagbe",
+                text=f"𝗖𝗮𝗿𝗱: <code>{card}</code>\n{status}\n\n👤 𝗥𝗲𝗾𝘂𝗲𝘀𝘁 𝗯𝘆: {username}  |  𝗝𝗼𝗶𝗻: @bro_bin_lagbe",
                 parse_mode="HTML"
             )
         except Exception as e:
@@ -111,7 +111,7 @@ def register(bot, custom_command_handler, command_prefixes_list):
         # Added a loop to check each card with a delay
         for i, card in enumerate(cards):
             status = check_card(card)
-            results.append(f"<code>{card}</code>\n{status}")
+            results.append(f"𝗖𝗮𝗿𝗱: <code>{card}</code>\n{status}")
             
             # Update message text after each card check
             current_progress = f"🔄 Checking card {i+1} of {len(cards)}...\n\n"
