@@ -29,7 +29,7 @@ from handlers import (
     iban_handler,
     wth_handler,
     b3_handler,
-    movie_handler.py
+    movie_handler
 )
 
 BOT_TOKEN = "8288718215:AAF1h-5sSQKpQpHwsWJbLPuLeq2lc4XaEtQ"
