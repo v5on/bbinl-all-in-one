@@ -42,13 +42,13 @@ def check_card_b3(card):
         status_emoji = ""
         if data.get("is_approved", False):
             status = "Live"
-            status_emoji = "🟢✅"
+            status_emoji = "✅"
         elif "DECLINED" in status.upper():
             status = "Dead"
-            status_emoji = "🔴❌"
+            status_emoji = "❌"
         else:
             status = "Unknown"
-            status_emoji = "⚠️❓"
+            status_emoji = "⚠️"
         
         # Construct the output string
         output = (
@@ -56,12 +56,13 @@ def check_card_b3(card):
             f"<b>Response:</b> <code>{html.escape(response_text)}</code>\n"
             f"<b>Gateway:</b> <code>{html.escape(gateway)}</code>\n"
             f"<b>Time:</b> <code>{html.escape(time_taken)}</code>\n"
-            f"--- BIN INFO ---\n"
+            f"•━━━━━ 𝗕𝗶𝗻 𝗜𝗻𝗳𝗼 ━━━━━•\n"
             f"<b>Brand:</b> <code>{html.escape(brand)}</code>\n"
             f"<b>Type:</b> <code>{html.escape(card_type)}</code>\n"
             f"<b>Level:</b> <code>{html.escape(level)}</code>\n"
             f"<b>Bank:</b> <code>{html.escape(bank)}</code>\n"
-            f"<b>Country:</b> <code>{html.escape(country)}</code> {emoji}"
+            f"<b>Country:</b> <code>{html.escape(country)}</code> {emoji}\n"
+            f"•━━━━━━━━━━━━━━━━━━•\n"
         )
         
         return output
