@@ -31,7 +31,7 @@ from handlers import (
     b3_handler
 )
 
-BOT_TOKEN = "8090088552:AAFky32RnE4DwgjOIszpjbAXJsr_QsyY4kc"
+BOT_TOKEN = "8288718215:AAF1h-5sSQKpQpHwsWJbLPuLeq2lc4XaEtQ"
 bot = telebot.TeleBot(BOT_TOKEN, parse_mode="HTML")
 
 COMMAND_PREFIXES = list(string.punctuation)
