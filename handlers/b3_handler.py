@@ -62,7 +62,7 @@ def check_card_b3(card):
             f"<b>Level:</b> <code>{html.escape(level)}</code>\n"
             f"<b>Bank:</b> <code>{html.escape(bank)}</code>\n"
             f"<b>Country:</b> <code>{html.escape(country)}</code> {emoji}\n"
-            f"•━━━━━━━━━━━━━━━━━━•\n"
+            f"•━━━━━━━━━━━━━━━━━━•"
         )
         
         return output
@@ -165,3 +165,4 @@ def register(bot, custom_command_handler, command_prefixes_list):
             )
         except Exception as e:
             bot.reply_to(message, f"⚠️ Failed to edit message: {str(e)}")
+
