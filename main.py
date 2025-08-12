@@ -28,7 +28,8 @@ from handlers import (
     spam_handler,
     iban_handler,
     wth_handler,
-    b3_handler
+    b3_handler,
+    movie_handler.py
 )
 
 BOT_TOKEN = "8288718215:AAF1h-5sSQKpQpHwsWJbLPuLeq2lc4XaEtQ"
@@ -95,6 +96,7 @@ register_handler(spam_handler, "spam")
 register_handler(iban_handler, "iban")
 register_handler(wth_handler, "weather")
 register_handler(b3_handler, "b3")
+register_handler(movie_handler, "movie")
 
 print("-" * 40)
 print("✨ Handler registration completed!\n")
